@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Tailwind Glassmorphism & Shadow Generator</title>
+    <!-- Tailwind CSS CDN for instant styling -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body { background: linear-gradient(135deg, #0f172a, #1e1b4b); }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <main class="w-full max-w-4xl bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-2xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+                Tailwind Glassmorphism Engine
+            </h1>
+            <p class="text-slate-400 text-sm mt-2">Generate production-ready Tailwind classes instantly. Zero server load.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left: Controls -->
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Opacity (<span id="opacityVal">30</span>%)</label>
+                    <input type="range" id="opacity" min="10" max="90" value="30" class="w-full accent-cyan-500 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Blur (<span id="blurVal">12</span>px)</label>
+                    <input type="range" id="blur" min="0" max="40" value="12" class="w-full accent-cyan-500 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Border Opacity (<span id="borderVal">20</span>%)</label>
+                    <input type="range" id="border" min="0" max="100" value="20" class="w-full accent-cyan-500 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+
+            <!-- Right: Preview & Code Output -->
+            <div class="flex flex-col justify-between items-center bg-slate-950/40 rounded-xl p-6 border border-slate-800/50">
+                <!-- Live Preview Target -->
+                <div class="w-full h-40 flex items-center justify-center rounded-xl transition-all duration-150" id="previewBox">
+                    <span class="text-sm font-medium text-slate-200">Live Preview Container</span>
+                </div>
+
+                <!-- Generated Class Display -->
+                <div class="w-full mt-6">
+                    <div class="flex justify-between items-center bg-slate-900 px-4 py-3 rounded-lg border border-slate-800">
+                        <code class="text-xs font-mono text-cyan-400 overflow-x-auto whitespace-nowrap mr-2 select-all" id="codeOutput">bg-white/30 backdrop-blur-md border border-white/20</code>
+                        <button id="copyBtn" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs px-3 py-1.5 rounded font-semibold transition cursor-pointer active:scale-95">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Essential SEO Footer Area for AdSense compliance -->
+    <footer class="mt-8 text-center text-xs text-slate-500 max-w-xl">
+        <p>© 2026 MicroTools Engine. Free developer utility hosted entirely on GitHub Pages. Privacy guaranteed: No data ever leaves your browser.</p>
+    </footer>
+
+    <script>
+        const opacityInput = document.getElementById('opacity');
+        const blurInput = document.getElementById('blur');
+        const borderInput = document.getElementById('border');
+        
+        const opacityVal = document.getElementById('opacityVal');
+        const blurVal = document.getElementById('blurVal');
+        const borderVal = document.getElementById('borderVal');
+
+        const previewBox = document.getElementById('previewBox');
+        const codeOutput = document.getElementById('codeOutput');
+        const copyBtn = document.getElementById('copyBtn');
+
+        function updateStyles() {
+            const op = opacityInput.value;
+            const bl = blurInput.value;
+            const bo = borderInput.value;
+
+            // Update UI text values
+            opacityVal.textContent = op;
+            blurVal.textContent = bl;
+            borderVal.textContent = bo;
+
+            // Apply styles inline for exact preview representation
+            previewBox.style.backgroundColor = `rgba(255, 255, 255, ${op / 100})`;
+            previewBox.style.backdropFilter = `blur(${bl}px)`;
+            previewBox.style.webkitBackdropFilter = `blur(${bl}px)`;
+            previewBox.style.borderColor = `rgba(255, 255, 255, ${bo / 100})`;
+            previewBox.style.borderWidth = '1px';
+
+            // Generate Tailwind v4 string equivalent
+            const tailwindClass = `bg-white/${op} backdrop-blur-[${bl}px] border border-white/${bo}`;
+            codeOutput.textContent = tailwindClass;
+        }
+
+        // Event listeners for real-time tracking
+        opacityInput.addEventListener('input', updateStyles);
+        blurInput.addEventListener('input', updateStyles);
+        borderInput.addEventListener('input', updateStyles);
+
+        // Copy functionality
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeOutput.textContent);
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.replace('bg-cyan-600', 'bg-emerald-600');
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy';
+                copyBtn.classList.replace('bg-emerald-600', 'bg-cyan-600');
+            }, 1500);
+        });
+
+        // Initialize on page load
+        updateStyles();
+    </script>
+</body>
+</html>
